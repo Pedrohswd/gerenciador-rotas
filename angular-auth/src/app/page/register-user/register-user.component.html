@@ -1,0 +1,54 @@
+<div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+    <div class="text-center mb-5">
+        <div class="text-900 text-3xl font-medium mb-3">Criar Usuário</div>
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="flex flex-column gap-2 mb-3">
+            <label for="name">Nome</label>
+            <input 
+                pInputText 
+                id="name" 
+                formControlName="name" 
+                class="w-full">
+        </div>
+
+        <div class="flex flex-column gap-2 mb-3">
+            <label for="username">Usuário</label>
+            <input 
+                pInputText 
+                id="username" 
+                formControlName="username" 
+                class="w-full">
+        </div>
+
+        <div class="flex flex-column gap-2 mb-3">
+            <label for="password">Senha</label>
+            <p-password 
+                id="password" 
+                formControlName="password"
+                [toggleMask]="true"
+                [feedback]="true"
+                styleClass="w-full">
+            </p-password>
+        </div>
+
+        <div class="flex flex-column gap-2 mb-3">
+            <label for="role">Tipo de Permissão</label>
+            <p-dropdown
+                id="role"
+                formControlName="role"
+                [options]="roles"
+                placeholder="Selecione uma permissão">
+            </p-dropdown>
+        </div>
+        
+        <p-button 
+            label="Registrar" 
+            type="submit"
+            [loading]="loading"
+            styleClass="w-full"
+            [disabled]="userForm.invalid">
+        </p-button>
+    </form>
+</div>
