@@ -12,11 +12,6 @@ public class UserDTO {
 
     private String password;
 
-    private String cpf;
-
-    private String name;
-
     private String role;
 
-    private boolean active;
 }

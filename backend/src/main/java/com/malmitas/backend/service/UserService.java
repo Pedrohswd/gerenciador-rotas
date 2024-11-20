@@ -20,11 +20,9 @@ public class UserService {
     public User save(UserDTO user) {
         if (!userRepository.existsByUsername(user.getUsername())) {
             User newUser = new User();
-            newUser.setName(user.getName());
             newUser.setUsername(user.getUsername());
             newUser.setPassword(Utils.hashPassword(user.getPassword()));
             newUser.addRole(user.getRole());
-            newUser.setActive(true);
             return userRepository.save(newUser);
         }
 
@@ -39,8 +37,4 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void toggleActive(User user) {
-        user.setActive(!user.isActive());
-        userRepository.save(user);
-    }
 }

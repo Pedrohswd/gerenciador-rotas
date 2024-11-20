@@ -26,19 +26,19 @@ public class User {
 
     private String password;
 
-    @Column(unique = true, nullable = false)
-    private String cpf;
-
-    private String name;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "ENG_ROLE", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role_id")
     private List<String> roles = new ArrayList<>();
 
-    private boolean active;
-
     public void addRole(String role){
         roles.add(role);
+    }
+
+    public User(Long id, String username, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles.add(role);
     }
 }

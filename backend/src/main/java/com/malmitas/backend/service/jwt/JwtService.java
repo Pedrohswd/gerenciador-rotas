@@ -27,7 +27,6 @@ public class JwtService {
                 .issuer("jwt")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiry))
-                .subject(user.getName())
                 .subject(user.getUsername())
                 .claim("roles", roles)
                 .build();
