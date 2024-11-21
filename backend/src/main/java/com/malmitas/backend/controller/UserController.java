@@ -1,12 +1,10 @@
 package com.malmitas.backend.controller;
 
 import com.malmitas.backend.model.User;
-import com.malmitas.backend.model.UserDTO;
+import com.malmitas.backend.model.dtos.UserDTO;
 import com.malmitas.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("users")

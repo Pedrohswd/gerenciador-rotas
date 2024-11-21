@@ -1,4 +1,4 @@
-package com.malmitas.backend.model;
+package com.malmitas.backend.model.dtos.request;
 
 import lombok.Getter;
 import lombok.Setter;

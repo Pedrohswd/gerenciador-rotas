@@ -1,4 +1,4 @@
-package com.malmitas.backend.model;
+package com.malmitas.backend.model.dtos.response;
 
 public class AuthResponse {
     private String token;
