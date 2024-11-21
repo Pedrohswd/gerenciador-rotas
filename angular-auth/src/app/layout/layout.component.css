@@ -1,0 +1,33 @@
+.layout-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-main {
+    display: flex;
+    flex: 1;
+}
+
+.layout-sidebar {
+    width: 250px;
+    background-color: var(--surface-card);
+    border-right: 1px solid var(--surface-border);
+    transition: transform 0.3s;
+    
+    @media screen and (max-width: 768px) {
+        position: fixed;
+        height: 100%;
+        transform: translateX(-100%);
+        z-index: 1000;
+        
+        &.active {
+            transform: translateX(0);
+        }
+    }
+}
+
+.layout-content {
+    flex: 1;
+    padding: 20px;
+}

@@ -1,6 +1,6 @@
 package com.malmitas.backend.service;
 
-import com.malmitas.backend.model.LoginRequest;
+import com.malmitas.backend.model.dtos.request.LoginRequest;
 import com.malmitas.backend.model.User;
 import com.malmitas.backend.service.jwt.JwtService;
 import com.malmitas.backend.utils.Utils;

@@ -1,7 +1,7 @@
 package com.malmitas.backend.controller;
 
-import com.malmitas.backend.model.AuthResponse;
-import com.malmitas.backend.model.LoginRequest;
+import com.malmitas.backend.model.dtos.response.AuthResponse;
+import com.malmitas.backend.model.dtos.request.LoginRequest;
 import com.malmitas.backend.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

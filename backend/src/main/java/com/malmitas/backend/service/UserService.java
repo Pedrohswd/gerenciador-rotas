@@ -1,13 +1,12 @@
 package com.malmitas.backend.service;
 
 import com.malmitas.backend.model.User;
-import com.malmitas.backend.model.UserDTO;
+import com.malmitas.backend.model.dtos.UserDTO;
 import com.malmitas.backend.repository.UserRepository;
 import com.malmitas.backend.utils.Utils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {

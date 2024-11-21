@@ -9,7 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
-import { LayoutService } from '../../service/layout.service';
+import { LayoutService } from '../../layout/service/layout.service';
 
 
 @Component({
@@ -49,7 +49,7 @@ export class LoginComponent {
         const token = response.token;  // Esperando a resposta com o token JWT
         if (token) {
           console.log('Autenticado com sucesso!');
-          this.router.navigate(['/home']);
+          this.router.navigate(['/pedidos']);
         }
       },
       (error) => {
