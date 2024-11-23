@@ -1,10 +1,13 @@
 package com.malmitas.backend.model;
 
+import com.malmitas.backend.model.enuns.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,9 +22,23 @@ public class Order {
     private Long id;
     private String name;
     private String description;
-    private String address;
+    private String street;
+    private String county;
+    private String city;
+    private String state;
     private String price;
-    private String quantity;
-    private String latitude;
-    private String longitude;
+    private int quantity;
+    private double latitude;
+    private double longitude;
+
+    @Enumerated(EnumType.STRING)
+    private Status status; // Status do pedido (nota gerada ou não)
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now(); // Define a data/hora de inclusão automaticamente
+    }
 }

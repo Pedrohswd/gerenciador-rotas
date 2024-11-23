@@ -17,7 +17,6 @@ interface MenuItem {
   standalone: true,
   imports: [CommonModule, RouterModule, MenuItemComponent],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
 })
 export class MenuComponent {
   model: any[] = [];
@@ -29,7 +28,7 @@ export class MenuComponent {
           {
               label: 'Home',
               items: [
-                  { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/pedidos'] },
+                  { label: 'Pedidos', icon: 'pi pi-fw pi-check-square', routerLink: ['/pedidos'] },
               ]
           },
       ];

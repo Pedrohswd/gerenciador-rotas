@@ -20,7 +20,7 @@ public class JwtService {
 
     public String generateToken(User user) {
         Instant now = Instant.now();
-        long expiry = 36000L;
+        long expiry = 10800L;
         var roles = user.getRoles();
 
         var claims = JwtClaimsSet.builder()

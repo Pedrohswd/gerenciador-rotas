@@ -5,23 +5,38 @@
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPedidos()" [disabled]="!selectedpedidos || !selectedpedidos.length"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPedidos()" [disabled]="!selectedPedidos || !selectedPedidos.length"></button>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <div class="my-2">
+                        <label for="calendar">Pedidos criados em:</label>
+                        <p-calendar class="mr-2"
+                        [(ngModel)]="selectedDate" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true"
+                        id="calendar"
+                        dateFormat="dd/mm/yy" 
+                        inputId="icondisplay"
+                        (onSelect)="filterByDate()"/>
+                        <button pButton label="Gerar Rotas" 
+                        [disabled]="!selectedPedidos || !selectedPedidos.length"
+                        (click)="gerarRotas()" ></button>
+                
+                    </div>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="pedidos" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedpedidos" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="filteredPedidos" [columns]="cols" 
+            responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+            [(selection)]="selectedPedidos" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Pedidos</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
                         </span>
                     </div>
                 </ng-template>
@@ -31,10 +46,11 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="code">Id <p-sortIcon field="id"></p-sortIcon></th>
-                        <th pSortableColumn="name">Nome Cliente <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Nome do Cliente <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="quantity">Quantidade <p-sortIcon field="quantity"></p-sortIcon></th>
                         <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                        <th pSortableColumn="price">Rua <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="price">Bairro <p-sortIcon field="price"></p-sortIcon></th>
                         <th pSortableColumn="ações">Ações <p-sortIcon field="ações"></p-sortIcon></th>
                         <th></th>
                     </tr>
@@ -51,16 +67,21 @@
                             <span class="p-column-title">Name</span>
                             {{pedido.name}}
                         </td>
-                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>
+                        <td style="width:14%; min-width:8rem;"><span class="p-column-title">Quantidade</span>
                             <span class="p-column-title">Quantidade</span>
                             {{pedido.quantity}}
                         </td>
-                        <td style="width:14%; min-width:8rem;">
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Price</span>
-                            {{pedido.price | currency:'USD'}}
+                            {{pedido.price | currency:'BRL'}}
                         </td>
-                        <td style="width:12%; min-width: 10rem;"><span class="p-column-title">Status</span>
-                            <span [class]="'pedido-badge status-' + (pedido.inventoryStatus ? pedido.inventoryStatus.toLowerCase() : '')">{{pedido.inventoryStatus}}</span>
+                        <td style="width:14%; min-width:8rem;"><span class="p-column-title">Rua</span>
+                            <span class="p-column-title">Rua</span>
+                            {{pedido.street}}
+                        </td>
+                        <td style="width:14%; min-width:8rem;"><span class="p-column-title">Bairro</span>
+                            <span class="p-column-title">Bairro</span>
+                            {{pedido.county}}
                         </td>
                         <td>
                             <div class="flex">
@@ -73,7 +94,7 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="pedidoDialog" [style]="{width: '450px'}" header="Manutenção de Pedidos" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="pedidoDialog" [style]="{width: '500px'}" header="Manutenção de Pedidos" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Nome Cliente</label>
@@ -83,6 +104,27 @@
                 <div class="field">
                     <label for="description">Descrição</label>
                     <textarea id="description" pInputTextarea [(ngModel)]="pedido.description" required rows="3" cols="20"></textarea>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="street">Rua</label>
+                        <input pInputText id="street" [(ngModel)]="pedido.street">
+                    </div>
+                    <div class="field col">
+                        <label for="county">Bairro</label>
+                        <input pInputText id="county" [(ngModel)]="pedido.county">
+                    </div>
+                </div>
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="city">Cidade</label>
+                        <input pInputText id="city" [(ngModel)]="pedido.city">
+                    </div>
+                    <div class="field col">
+                        <label for="state">Estado</label>
+                        <input pInputText id="state" [(ngModel)]="pedido.state">
+                    </div>
                 </div>
 
                 <div class="formgrid grid">
@@ -106,7 +148,7 @@
         <p-dialog [(visible)]="deletepedidoDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="pedido">Are you sure you want to delete <b>{{pedido.name}}</b>?</span>
+                <span *ngIf="pedido">Tem ceteza que deseja deletar o pedido? <b>{{pedido.name}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletepedidoDialog = false"></button>
@@ -117,7 +159,7 @@
         <p-dialog [(visible)]="deletepedidosDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected pedidos?</span>
+                <span>Você quer realmente deletar os pedidos?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletepedidosDialog = false"></button>

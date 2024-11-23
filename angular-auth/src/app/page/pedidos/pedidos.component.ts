@@ -16,6 +16,8 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
+import { TagModule } from 'primeng/tag';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-pedidos',
@@ -24,6 +26,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     TableModule,
     FileUploadModule,
+    TagModule,
     FormsModule,
     ButtonModule,
     RippleModule,
@@ -35,9 +38,9 @@ import { CommonModule } from '@angular/common';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
+    CalendarModule,
     DialogModule],
   templateUrl: './pedidos.component.html',
-  styleUrl: './pedidos.component.css'
 })
 export class PedidosComponent {
   pedidoDialog: boolean = false;
@@ -46,11 +49,15 @@ export class PedidosComponent {
 
   deletepedidosDialog: boolean = false;
 
+  selectedDate: Date = new Date()
+  
+  filteredPedidos: Pedido[] = [];
+
   pedidos: Pedido[] = [];
 
   pedido: Pedido = {};
 
-  selectedpedidos: Pedido[] = [];
+  selectedPedidos: Pedido[] = [];
 
   submitted: boolean = false;
 
@@ -63,16 +70,34 @@ export class PedidosComponent {
   constructor(private pedidoService: PedidoService) { }
 
   ngOnInit() {
-      this.pedidoService.getAllPedidos().subscribe(data => this.pedidos = data);
-
-      this.cols = [
-          { field: 'pedido', header: 'pedido' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
+    this.pedidoService.getAllPedidos().subscribe(data =>{
+        this.filteredPedidos = data
+        this.pedidos = data
+    });
+      this.filterByDate()
   }
+
+  filterByDate() {
+        let selectedDate = this.selectedDate;
+        
+        if (selectedDate) {
+            // Converte as datas para o início do dia para comparação
+            const startOfDay = new Date(selectedDate);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            this.filteredPedidos = this.pedidos.filter(pedido => {
+                if (pedido.createdAt) {
+                    const pedidoDate = new Date(pedido.createdAt);
+                    pedidoDate.setHours(0, 0, 0, 0);
+                    return pedidoDate.getTime() === startOfDay.getTime();
+                }
+                return false;
+            });
+        } else {
+            // Se nenhuma data selecionada, mostra todos os pedidos
+            this.filteredPedidos = [...this.pedidos];
+        }
+    }
 
   openNew() {
       this.pedido = {};
@@ -82,6 +107,10 @@ export class PedidosComponent {
 
   deleteSelectedPedidos() {
       this.deletepedidosDialog = true;
+  }
+
+  gerarRotas(){
+    this.pedidoService.gerarRotas(this.selectedPedidos)
   }
 
   editPedido(pedido: Pedido) {
@@ -96,8 +125,8 @@ export class PedidosComponent {
 
   confirmDeleteSelected() {
       this.deletepedidosDialog = false;
-      this.pedidos = this.pedidos.filter(val => !this.selectedpedidos.includes(val));
-      this.selectedpedidos = [];
+      this.pedidos = this.pedidos.filter(val => !this.selectedPedidos.includes(val));
+      this.selectedPedidos = [];
   }
 
   confirmDelete() {
@@ -114,7 +143,7 @@ export class PedidosComponent {
   savePedido() {
       this.submitted = true;
 
-if (this.pedido.name?.trim()) {
+    if (this.pedido.name?.trim()) {
         if (this.pedido.id) {
             // Atualizar pedido existente
             this.pedidoService.updatePedido(this.pedido).subscribe({

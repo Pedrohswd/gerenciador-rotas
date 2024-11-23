@@ -4,7 +4,12 @@ export interface Pedido {
     description?: string;
     price?: number;
     quantity?: number;
-    address?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    county?: string;
+    status?: string;
+    createdAt?: string;
     latitude?: string;
     longitude?: string;
 }

@@ -31,7 +31,6 @@ import { SlidebarComponent } from './components/slidebar/slidebar.component';
     SlidebarComponent,
   ],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
 })
 export class LayoutComponent implements OnDestroy {
   overlayMenuOpenSubscription: Subscription;
