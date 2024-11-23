@@ -20,9 +20,10 @@
                         dateFormat="dd/mm/yy" 
                         inputId="icondisplay"
                         (onSelect)="filterByDate()"/>
+
                         <button pButton label="Gerar Rotas" 
                         [disabled]="!selectedPedidos || !selectedPedidos.length"
-                        (click)="gerarRotas()" ></button>
+                        (click)="gerarRotas(selectedPedidos)" ></button>
                 
                     </div>
                 </ng-template>

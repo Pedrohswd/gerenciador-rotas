@@ -2,6 +2,7 @@ package com.malmitas.backend.controller;
 
 import com.malmitas.backend.model.Order;
 import com.malmitas.backend.model.Route;
+import com.malmitas.backend.model.dtos.response.RouteResponse;
 import com.malmitas.backend.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +23,12 @@ public class RotaController {
     public List<Route> otimizarRotas(@RequestBody List<Order> pedidos) {
         List<Route> rotas = otimizador.agruparPedidos(pedidos, 12);
         for (Route rota : rotas) {
-            Order pontoInicial = new Order(); // Coordenadas da cozinha
+            Order pontoInicial = new Order();
             pontoInicial.setLatitude(-16.39925);
             pontoInicial.setLongitude(-49.22721);
-            List<Order> rotaOtimizada = otimizador.otimizarRota(pontoInicial, rota.getOrders());
-            rota.setOrders(rotaOtimizada);
+            RouteResponse rotaOtimizada = otimizador.otimizarRota(pontoInicial, rota.getOrders());
+            rota.setOrders(rotaOtimizada.getOrders());
+            rota.setDistanciaTotal(rotaOtimizada.getDistance());
         }
         return rotas;
     }

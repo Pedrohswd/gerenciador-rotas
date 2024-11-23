@@ -1,8 +1,13 @@
 package com.malmitas.backend.service;
 
+import com.malmitas.backend.model.dtos.response.DistanceMatrixResponse;
 import com.malmitas.backend.model.Order;
 import com.malmitas.backend.model.Route;
+import com.malmitas.backend.model.dtos.response.GeoLocationResponse;
+import com.malmitas.backend.model.dtos.response.RouteResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,30 +15,53 @@ import java.util.List;
 @Service
 public class RouteService {
 
-    public List<Order> otimizarRota(Order pontoInicial, List<Order> orders) {
+    @Autowired
+    private GoogleLocationService googleLocationService;
+    private static final String API_KEY = "AIzaSyAD1GxRYSjkAJk_brXwpIkJBRouKgzUtAA";
+
+    public RouteResponse otimizarRota(Order pontoInicial, List<Order> orders) {
         List<Order> rotaOtimizada = new ArrayList<>();
         Order atual = pontoInicial;
+        double distanciaTrecho = 0;
+        RouteResponse response = new RouteResponse();
 
         while (!orders.isEmpty()) {
             Order maisProximo = null;
             double menorDistancia = Double.MAX_VALUE;
 
             for (Order order : orders) {
-                double distancia = calcularDistancia(
+                double distancia = calcularDistanciaViaAPI(
                         atual.getLatitude(), atual.getLongitude(),
                         order.getLatitude(), order.getLongitude()
                 );
                 if (distancia < menorDistancia) {
                     menorDistancia = distancia;
+                    distanciaTrecho = distancia;
                     maisProximo = order;
                 }
             }
             rotaOtimizada.add(maisProximo);
+            response.setDistance(distanciaTrecho + response.getDistance());
             orders.remove(maisProximo);
             atual = maisProximo;
         }
+        response.setOrders(rotaOtimizada);
+        return response;
+    }
 
-        return rotaOtimizada;
+    public double calcularDistanciaViaAPI(double latAtual, double lonAtual, double latDest, double lonDest) {
+
+        Mono<DistanceMatrixResponse> locationMono = googleLocationService.getGoogleLocation(
+                latAtual,
+                lonAtual,
+                latDest,
+                lonDest,
+                API_KEY
+        );
+        DistanceMatrixResponse locations = locationMono.block();
+
+        return locations.getRows().get(0).getElements().get(0).getDistance().getValue() / 1000.0;
+
     }
 
     public static double calcularDistancia(double lat1, double lon1, double lat2, double lon2) {

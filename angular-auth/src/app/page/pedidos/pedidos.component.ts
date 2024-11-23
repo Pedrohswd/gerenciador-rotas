@@ -109,8 +109,10 @@ export class PedidosComponent {
       this.deletepedidosDialog = true;
   }
 
-  gerarRotas(){
-    this.pedidoService.gerarRotas(this.selectedPedidos)
+  gerarRotas(pedidos: Pedido[]){
+    this.pedidoService.gerarRotas(pedidos).subscribe(data => {
+        console.log(data)
+    })
   }
 
   editPedido(pedido: Pedido) {
