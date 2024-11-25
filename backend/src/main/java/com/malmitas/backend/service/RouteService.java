@@ -1,5 +1,6 @@
 package com.malmitas.backend.service;
 
+import com.malmitas.backend.model.dtos.DistanceDuration;
 import com.malmitas.backend.model.dtos.response.DistanceMatrixResponse;
 import com.malmitas.backend.model.Order;
 import com.malmitas.backend.model.Route;
@@ -18,11 +19,14 @@ public class RouteService {
     @Autowired
     private GoogleLocationService googleLocationService;
     private static final String API_KEY = "AIzaSyAD1GxRYSjkAJk_brXwpIkJBRouKgzUtAA";
+    private static final int JANELA_TEMPO_SEGUNDOS = 4 * 3600;
 
     public RouteResponse otimizarRota(Order pontoInicial, List<Order> orders) {
         List<Order> rotaOtimizada = new ArrayList<>();
         Order atual = pontoInicial;
         double distanciaTrecho = 0;
+        double tempoTrecho = 0;
+        int entregadoresNecessarios = 0;
         RouteResponse response = new RouteResponse();
 
         while (!orders.isEmpty()) {
@@ -30,26 +34,29 @@ public class RouteService {
             double menorDistancia = Double.MAX_VALUE;
 
             for (Order order : orders) {
-                double distancia = calcularDistanciaViaAPI(
+                DistanceDuration distancia = calcularDistanciaViaAPI(
                         atual.getLatitude(), atual.getLongitude(),
                         order.getLatitude(), order.getLongitude()
                 );
-                if (distancia < menorDistancia) {
-                    menorDistancia = distancia;
-                    distanciaTrecho = distancia;
+                if (distancia.getDistance() < menorDistancia) {
+                    menorDistancia = distancia.getDistance();
+                    distanciaTrecho = distancia.getDistance();
+                    tempoTrecho = distancia.getDuration();
                     maisProximo = order;
                 }
             }
             rotaOtimizada.add(maisProximo);
             response.setDistance(distanciaTrecho + response.getDistance());
+            response.setDuration(tempoTrecho + response.getDuration());
             orders.remove(maisProximo);
             atual = maisProximo;
         }
         response.setOrders(rotaOtimizada);
+        
         return response;
     }
 
-    public double calcularDistanciaViaAPI(double latAtual, double lonAtual, double latDest, double lonDest) {
+    public DistanceDuration calcularDistanciaViaAPI(double latAtual, double lonAtual, double latDest, double lonDest) {
 
         Mono<DistanceMatrixResponse> locationMono = googleLocationService.getGoogleLocation(
                 latAtual,
@@ -59,8 +66,10 @@ public class RouteService {
                 API_KEY
         );
         DistanceMatrixResponse locations = locationMono.block();
+        double distancia = locations.getRows().get(0).getElements().get(0).getDistance().getValue() / 1000.0; // km
+        double duracao = locations.getRows().get(0).getElements().get(0).getDuration().getValue() / 60.0; // minutos
 
-        return locations.getRows().get(0).getElements().get(0).getDistance().getValue() / 1000.0;
+        return new DistanceDuration(distancia, duracao);
 
     }
 

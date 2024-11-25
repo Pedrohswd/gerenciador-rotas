@@ -29,6 +29,7 @@ public class RotaController {
             RouteResponse rotaOtimizada = otimizador.otimizarRota(pontoInicial, rota.getOrders());
             rota.setOrders(rotaOtimizada.getOrders());
             rota.setDistanciaTotal(rotaOtimizada.getDistance());
+            rota.setDuracaoTotal(rotaOtimizada.getDuration());
         }
         return rotas;
     }

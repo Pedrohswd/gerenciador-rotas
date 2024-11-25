@@ -9,12 +9,16 @@ import java.util.List;
 @Setter
 @Getter
 public class Route {
-    private List<Order> orders;
+    private List<Order> orders =  new ArrayList<>();
     private double distanciaTotal;
+    private double duracaoTotal;
 
     public Route() {
-        this.orders = new ArrayList<>();
         this.distanciaTotal = 0.0;
+    }
+    public Route(List<Order> orders, double distance) {
+        this.orders = orders;
+        this.distanciaTotal = distance;
     }
 
     public void adicionarPedido(Order order) {

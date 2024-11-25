@@ -4,4 +4,5 @@ export interface Rotas {
     id: any;
     pedidos: Pedido[];
     distanciaTotal: number
+    duracaoTotal: number
 }

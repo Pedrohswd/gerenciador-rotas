@@ -7,6 +7,8 @@ import java.util.List;
 public class RouteResponse {
     private List<Order> orders;
     private double distance;
+    private double duration;
+    private int numerosEntregadores;
 
     public List<Order> getOrders() {
         return orders;
@@ -22,5 +24,21 @@ public class RouteResponse {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public int getNumerosEntregadores() {
+        return numerosEntregadores;
+    }
+
+    public void setNumerosEntregadores(int numerosEntregadores) {
+        this.numerosEntregadores = numerosEntregadores;
     }
 }
