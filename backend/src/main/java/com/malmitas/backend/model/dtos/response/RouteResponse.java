@@ -2,6 +2,7 @@ package com.malmitas.backend.model.dtos.response;
 
 import com.malmitas.backend.model.Order;
 
+import java.util.Date;
 import java.util.List;
 
 public class RouteResponse {
@@ -9,6 +10,7 @@ public class RouteResponse {
     private double distance;
     private double duration;
     private int numerosEntregadores;
+    private Date dataHora;
 
     public List<Order> getOrders() {
         return orders;
@@ -40,5 +42,13 @@ public class RouteResponse {
 
     public void setNumerosEntregadores(int numerosEntregadores) {
         this.numerosEntregadores = numerosEntregadores;
+    }
+
+    public Date getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(Date dataHora) {
+        this.dataHora = dataHora;
     }
 }

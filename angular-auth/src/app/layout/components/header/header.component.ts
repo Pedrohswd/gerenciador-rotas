@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LayoutService } from '../../service/layout.service';
+import { AuthService } from '../../../service/auth-service.service';
 
 @Component({
   selector: 'app-header',
@@ -23,5 +24,9 @@ export class HeaderComponent {
 
   @ViewChild('topbarmenu') menu!: ElementRef;
 
-  constructor(public layoutService: LayoutService) { }
+  constructor(public layoutService: LayoutService, private authService: AuthService) { }
+
+  logout(): void{
+    this.authService.logout();
+  }
 }

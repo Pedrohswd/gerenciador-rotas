@@ -4,40 +4,39 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPedidos()" [disabled]="!selectedPedidos || !selectedPedidos.length"></button>
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedPedidos()"
+                            [disabled]="!selectedPedidos || !selectedPedidos.length"></button>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
                     <div class="my-2">
                         <label for="calendar">Pedidos criados em:</label>
-                        <p-calendar class="mr-2"
-                        [(ngModel)]="selectedDate" 
-                        [iconDisplay]="'input'" 
-                        [showIcon]="true"
-                        id="calendar"
-                        dateFormat="dd/mm/yy" 
-                        inputId="icondisplay"
-                        (onSelect)="filterByDate()"/>
+                        <p-calendar class="mr-2" [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true"
+                            id="calendar" dateFormat="dd/mm/yy" inputId="icondisplay" (onSelect)="filterByDate()" />
 
-                        <button pButton label="Gerar Rotas" 
-                        [disabled]="!selectedPedidos || !selectedPedidos.length"
-                        (click)="gerarRotas(selectedPedidos)" ></button>
-                
+                        <button pButton label="Gerar Rotas" [disabled]="!selectedPedidos || !selectedPedidos.length"
+                            (click)="gerarRotas(selectedPedidos)"></button>
+
                     </div>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="filteredPedidos" [columns]="cols" 
-            responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-            [(selection)]="selectedPedidos" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="filteredPedidos" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedPedidos" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Pedidos</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
                         </span>
                     </div>
                 </ng-template>
@@ -46,13 +45,13 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="code">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="name">Nome do Cliente <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="quantity">Quantidade <p-sortIcon field="quantity"></p-sortIcon></th>
                         <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Rua <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="price">Bairro <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="ações">Ações <p-sortIcon field="ações"></p-sortIcon></th>
+                        <th pSortableColumn="street">Rua <p-sortIcon field="street"></p-sortIcon></th>
+                        <th pSortableColumn="status">Rota <p-sortIcon field="status"></p-sortIcon></th>
+                        <th>Ações</th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -80,14 +79,15 @@
                             <span class="p-column-title">Rua</span>
                             {{pedido.street}}
                         </td>
-                        <td style="width:14%; min-width:8rem;"><span class="p-column-title">Bairro</span>
-                            <span class="p-column-title">Bairro</span>
-                            {{pedido.county}}
+                        <td><span [class]="'order-badge order-' + pedido.status.toLowerCase()">{{pedido.status}}</span>
                         </td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPedido(pedido)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePedido(pedido)"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editPedido(pedido)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deletePedido(pedido)"></button>
                             </div>
                         </td>
                     </tr>
@@ -95,16 +95,19 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="pedidoDialog" [style]="{width: '500px'}" header="Manutenção de Pedidos" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="pedidoDialog" [style]="{width: '500px'}" header="Manutenção de Pedidos" [modal]="true"
+            class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Nome Cliente</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="pedido.name" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !pedido.name}"/>
+                    <input type="text" pInputText id="name" [(ngModel)]="pedido.name" required autofocus
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !pedido.name}" />
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !pedido.name">Name is required.</small>
                 </div>
                 <div class="field">
                     <label for="description">Descrição</label>
-                    <textarea id="description" pInputTextarea [(ngModel)]="pedido.description" required rows="3" cols="20"></textarea>
+                    <textarea id="description" pInputTextarea [(ngModel)]="pedido.description" required rows="3"
+                        cols="20"></textarea>
                 </div>
 
                 <div class="formgrid grid">
@@ -131,7 +134,8 @@
                 <div class="formgrid grid">
                     <div class="field col">
                         <label for="price">Preço</label>
-                        <p-inputNumber id="price" [(ngModel)]="pedido.price" mode="currency" currency="BRL" locale="en-US"></p-inputNumber>
+                        <p-inputNumber id="price" [(ngModel)]="pedido.price" mode="currency" currency="BRL"
+                            locale="en-US"></p-inputNumber>
                     </div>
                     <div class="field col">
                         <label for="quantity">Quantidade</label>
@@ -141,8 +145,10 @@
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePedido()"></button>
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="savePedido()"></button>
             </ng-template>
         </p-dialog>
 
@@ -152,8 +158,10 @@
                 <span *ngIf="pedido">Tem ceteza que deseja deletar o pedido? <b>{{pedido.name}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletepedidoDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deletepedidoDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
@@ -163,8 +171,10 @@
                 <span>Você quer realmente deletar os pedidos?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletepedidosDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deletepedidosDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
     </div>

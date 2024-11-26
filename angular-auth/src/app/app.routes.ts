@@ -21,6 +21,12 @@ export const routes: Routes = [
                 .then(m => m.PedidosComponent),
                 canActivate: [AuthGuard]
         },
+        {
+          path: 'rotas',
+          loadComponent: () => import('./page/rotas/rotas.component')
+                .then(m => m.RotasComponent),
+                canActivate: [AuthGuard]
+        },
         { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

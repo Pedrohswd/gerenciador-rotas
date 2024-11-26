@@ -6,11 +6,17 @@ import com.malmitas.backend.model.Order;
 import com.malmitas.backend.model.Route;
 import com.malmitas.backend.model.dtos.response.GeoLocationResponse;
 import com.malmitas.backend.model.dtos.response.RouteResponse;
+import com.malmitas.backend.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,15 +24,34 @@ public class RouteService {
 
     @Autowired
     private GoogleLocationService googleLocationService;
+    @Autowired
+    private RouteRepository routeRepository;
+
     private static final String API_KEY = "AIzaSyAD1GxRYSjkAJk_brXwpIkJBRouKgzUtAA";
-    private static final int JANELA_TEMPO_SEGUNDOS = 4 * 3600;
+
+
+    public List<Route> gerarRotasOtimizadas(List<Order> pedidos) {
+        List<Route> rotas = agruparPedidos(pedidos, 12);
+        for (Route rota : rotas) {
+            Order pontoInicial = new Order();
+            pontoInicial.setLatitude(-16.39925);
+            pontoInicial.setLongitude(-49.22721);
+            RouteResponse rotaOtimizada = otimizarRota(pontoInicial, rota.getOrders());
+            rota.setOrders(rotaOtimizada.getOrders());
+            rota.setDistanciaTotal(rotaOtimizada.getDistance());
+            rota.setDuracaoTotal(rotaOtimizada.getDuration());
+        }
+
+
+        return rotas;
+    }
 
     public RouteResponse otimizarRota(Order pontoInicial, List<Order> orders) {
         List<Order> rotaOtimizada = new ArrayList<>();
         Order atual = pontoInicial;
         double distanciaTrecho = 0;
         double tempoTrecho = 0;
-        int entregadoresNecessarios = 0;
+
         RouteResponse response = new RouteResponse();
 
         while (!orders.isEmpty()) {
@@ -50,8 +75,12 @@ public class RouteService {
             response.setDuration(tempoTrecho + response.getDuration());
             orders.remove(maisProximo);
             atual = maisProximo;
+
         }
         response.setOrders(rotaOtimizada);
+
+        Route route = new Route(response);
+        routeRepository.save(route);
         
         return response;
     }
@@ -106,5 +135,48 @@ public class RouteService {
         }
 
         return rotas;
+    }
+
+    public int calcularEntregadoresNecessariosBaseadoNoTempo() {
+        // Obter rotas do dia atual
+        List<Route> rotas = routeRepository.findByCreatedAtAndNotClosed(LocalDate.now());
+
+        // Janela de tempo: das 10h às 14h
+        LocalTime inicioJanela = LocalTime.of(14, 0);
+        LocalTime fimJanela = LocalTime.of(20, 22);
+        LocalTime horaAtual = LocalTime.now();
+
+
+        double tempoDisponivelHoras = calcularTempoRestanteEmHoras(inicioJanela, fimJanela, horaAtual);
+
+        if (tempoDisponivelHoras <= 0) {
+            throw new IllegalStateException("A janela de entrega já expirou!");
+        }
+        double tempoDasRotasAbertas = 0.0;
+
+        for (Route rota : rotas) {
+            tempoDasRotasAbertas += rota.getDuracaoTotal() / 60;
+        }
+        return (int) Math.ceil(tempoDasRotasAbertas / tempoDisponivelHoras);
+
+    }
+
+    private double calcularTempoRestanteEmHoras(LocalTime inicioJanela, LocalTime fimJanela, LocalTime horaAtual) {
+        if (horaAtual.isBefore(inicioJanela)) {
+            return (double) (fimJanela.toSecondOfDay() - inicioJanela.toSecondOfDay()) / 3600.0;
+        } else if (horaAtual.isAfter(fimJanela)) {
+            return 0.0;
+        } else {
+            return (double) (fimJanela.toSecondOfDay() - horaAtual.toSecondOfDay()) / 3600.0;
+        }
+    }
+
+    public List<Route> findAll() {
+        return routeRepository.findAll();
+    }
+
+    public Route concluirRota(Route route) {
+        route.setClosed(!route.getClosed());
+        return routeRepository.save(route);
     }
 }

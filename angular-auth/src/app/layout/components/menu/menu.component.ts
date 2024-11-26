@@ -29,6 +29,7 @@ export class MenuComponent {
               label: 'Home',
               items: [
                   { label: 'Pedidos', icon: 'pi pi-fw pi-check-square', routerLink: ['/pedidos'] },
+                  { label: 'Rotas', icon: 'pi pi-fw pi-map-marker', routerLink: ['/rotas'] },
               ]
           },
       ];

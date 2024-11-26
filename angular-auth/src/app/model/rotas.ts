@@ -1,8 +1,9 @@
 import { Pedido } from "./pedido";
 
 export interface Rotas {
-    id: any;
-    pedidos: Pedido[];
-    distanciaTotal: number
-    duracaoTotal: number
+    id?: any;
+    orders: Pedido[];
+    distanciaTotal?: number
+    duracaoTotal?: number
+    createdAt?: string;
 }
