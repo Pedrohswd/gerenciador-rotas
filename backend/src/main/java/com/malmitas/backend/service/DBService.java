@@ -26,6 +26,6 @@ public class DBService {
     public void instanciaDB() {
         User user = new User(null, "admin", Utils.hashPassword("admin"), "ROLE_ADMIN");
         //userRepository.save(user);
-        routeRepository.deleteAll();
+        //routeRepository.deleteAll();
     }
 }

@@ -21,6 +21,12 @@ public class RotaController {
         return otimizador.gerarRotasOtimizadas(pedidos);
     }
 
+    @GetMapping("/link-rotas/{id}")
+    public String generateGoogleMapsUrl(@PathVariable Long id) {
+        String url = otimizador.generateGoogleMapsUrl(id);
+        return url;
+    }
+
     @GetMapping("/entregadores")
     public int numeroDeEntregadoresParaRealizar(){
         return otimizador.calcularEntregadoresNecessariosBaseadoNoTempo();
@@ -34,5 +40,10 @@ public class RotaController {
     @PutMapping("/concluir-rota")
     public Route concluirRota(@RequestBody Route route) {
         return otimizador.concluirRota(route);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarRota(@PathVariable Long id) {
+        otimizador.deletarRota(id);
     }
 }

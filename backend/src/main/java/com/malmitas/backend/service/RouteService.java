@@ -179,4 +179,39 @@ public class RouteService {
         route.setClosed(!route.getClosed());
         return routeRepository.save(route);
     }
+
+    public void deletarRota(Long id) {
+        routeRepository.deleteById(id);
+    }
+
+    public String generateGoogleMapsUrl(Long id) {
+
+        Route route = routeRepository.findById(id).orElseThrow();
+
+        if (route.getOrders().isEmpty()) {
+            throw new IllegalArgumentException("A rota deve conter ao menos um destino.");
+        }
+
+        StringBuilder url = new StringBuilder("https://www.google.com/maps/dir/");
+
+        Order pontoInicial = new Order();
+        pontoInicial.setLatitude(-16.39925);
+        pontoInicial.setLongitude(-49.22721);
+
+        url.append(pontoInicial.getLatitude())
+                .append(",")
+                .append(pontoInicial.getLongitude())
+                .append("/");
+
+        route.getOrders().forEach(order -> {
+            url.append(order.getLatitude())
+                    .append(",")
+                    .append(order.getLongitude())
+                    .append("/");
+        });
+
+        String formattedUrl = url.substring(0, url.length() - 1);
+
+        return formattedUrl.trim();
+    }
 }

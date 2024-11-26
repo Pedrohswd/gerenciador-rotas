@@ -59,6 +59,8 @@ export class RotasComponent {
 
   expandedRows: expandedRows = {};
 
+  entregadores: number = 0;
+
   selectedDate: Date = new Date()
 
   filteredRotas: Rotas[] = [];
@@ -68,6 +70,8 @@ export class RotasComponent {
   rota: Rotas = {
     orders: []
   };
+
+  routeUrl: any;
 
   selectedRota: Rotas[] = [];
 
@@ -82,15 +86,17 @@ export class RotasComponent {
       this.filteredRotas = data
       this.rotas = data
     });
-
     this.filterByDate()
+    this.rotaService.entregadores().subscribe(data => {
+      this.entregadores = data
+    });
   }
 
   filterByDate() {
     let selectedDate = this.selectedDate;
 
     if (selectedDate) {
-      
+
       const formattedDate = selectedDate.toISOString().split('T')[0];
       this.filteredRotas = this.rotas.filter(rota => rota.createdAt == formattedDate);
 
@@ -116,14 +122,34 @@ export class RotasComponent {
 
   concluirRota(rota: Rotas) {
     this.rotaService.concluirRota(rota).subscribe(resposta => {
-
+      if (this.rota.id)
+        this.rotas[this.findIndexById(this.rota.id)] = resposta;
+      this.rotas = [...this.rotas];
+      this.pedidoDialog = false;
+      this.rota = {
+        orders: []
+      };
     })
+
+    this.reload()
 
   }
 
-  deletePedido(pedido: Rotas) {
-    this.deletepedidoDialog = true;
-    this.rota = { ...pedido };
+  deletePedido(rota: Rotas) {
+    this.rotaService.deleteRota(rota).subscribe()
+    this.reload()
+  }
+
+  gerarLinkRota(rota: Rotas){
+    this.rotaService.gerarLinkRota(rota).subscribe(data => {
+      this.routeUrl = data
+      const formattedUrl = this.routeUrl.replace(/\s+/g, '');
+      window.open(formattedUrl, '_blank');
+    });
+  }
+
+  reload(){
+    window.location.reload()
   }
 
   confirmDeleteSelected() {

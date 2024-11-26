@@ -1,18 +1,33 @@
 <div class="col-12">
     <div class="card">
         <h5>Rotas Geradas</h5>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+                <div class="my-2">
+                    <label for="calendar" class="mr-2">Rotas geradas em:</label>
+                    <p-calendar class="mr-2"
+                    [(ngModel)]="selectedDate" 
+                    [iconDisplay]="'input'" 
+                    [showIcon]="true"
+                    id="calendar"
+                    dateFormat="dd/mm/yy"
+                    LocalDate 
+                    inputId="icondisplay"
+                    (onSelect)="filterByDate()"/>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="right">
+                <div class="my-2 font-semibold">
+                    <label>Entregadores necessários para entrega: {{entregadores}}</label>
+                </div>
+            </ng-template>
+        </p-toolbar>
         <p-table [value]="filteredRotas" dataKey="name" [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
             <ng-template pTemplate="caption">
-                <p-calendar class="mr-2"
-                [(ngModel)]="selectedDate" 
-                [iconDisplay]="'input'" 
-                [showIcon]="true"
-                id="calendar"
-                dateFormat="dd/mm/yy"
-                LocalDate 
-                inputId="icondisplay"
-                (onSelect)="filterByDate()"/>
+                
                 <div class="flex table-header">
+                    
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -41,7 +56,7 @@
                         <div class="flex">
                             <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success mr-2" (click)="concluirRota(rota)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deletePedido(rota)"></button>
-                            <button pButton pRipple icon="pi pi-share-alt" class="p-button-rounded p-button-info" (click)="deletePedido(rota)"></button>
+                            <button pButton pRipple icon="pi pi-share-alt" class="p-button-rounded p-button-info" (click)="gerarLinkRota(rota)"></button>
                         </div>
                     </td>
                 </tr>
@@ -65,8 +80,7 @@
                     <td>{{pedido.id}}</td>
                     <td>{{pedido.name}}</td>
                     <td>{{pedido.quantity}}</td>
-                    <td>{{pedido.price | currency:'USD'}}</td>
-                    <td><span [class]="'order-badge order-' + pedido.status.toLowerCase()">{{pedido.status}}</span></td>
+                    <td>{{pedido.price | currency:'BRK'}}</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
