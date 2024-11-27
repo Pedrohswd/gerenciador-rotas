@@ -4,7 +4,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                        <button pButton pRipple label="Adicionar" icon="pi pi-plus" class="p-button-warning mr-2"
                             (click)="openNew()"></button>
                         <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
                             (click)="deleteSelectedPedidos()"
@@ -18,7 +18,7 @@
                         <p-calendar class="mr-2" [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true"
                             id="calendar" dateFormat="dd/mm/yy" inputId="icondisplay" (onSelect)="filterByDate()" />
 
-                        <button pButton label="Gerar Rotas" [disabled]="!selectedPedidos || !selectedPedidos.length"
+                        <button pButton class="button" label="Gerar Rotas" [disabled]="!selectedPedidos || !selectedPedidos.length"
                             (click)="gerarRotas(selectedPedidos)"></button>
 
                     </div>
@@ -58,7 +58,7 @@
                 <ng-template pTemplate="body" let-pedido>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="pedido"></p-tableCheckbox>
+                            <p-tableCheckbox class="p-checkbox" [value]="pedido"></p-tableCheckbox>
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
                             {{pedido.code || pedido.id}}

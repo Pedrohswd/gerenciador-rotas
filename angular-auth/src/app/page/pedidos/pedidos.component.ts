@@ -41,6 +41,7 @@ import { CalendarModule } from 'primeng/calendar';
     CalendarModule,
     DialogModule],
   templateUrl: './pedidos.component.html',
+  styleUrl: './pedidos.component.css'
 })
 export class PedidosComponent {
   pedidoDialog: boolean = false;

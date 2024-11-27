@@ -10,12 +10,6 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
         {
-            path: 'home',
-            loadComponent: () => import('./page/home/home.component')
-                .then(m => m.HomeComponent),
-                canActivate: [AuthGuard]
-        },
-        {
           path: 'pedidos',
           loadComponent: () => import('./page/pedidos/pedidos.component')
                 .then(m => m.PedidosComponent),
@@ -27,7 +21,7 @@ export const routes: Routes = [
                 .then(m => m.RotasComponent),
                 canActivate: [AuthGuard]
         },
-        { path: '', redirectTo: 'home', pathMatch: 'full' }
+        { path: '', redirectTo: 'pedidos', pathMatch: 'full' }
     ]
   },
   {path: 'login', component: LoginComponent}
