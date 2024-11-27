@@ -24,8 +24,8 @@ public class DBService {
 
     @Transactional
     public void instanciaDB() {
-        User user = new User(null, "admin", Utils.hashPassword("admin"), "ROLE_ADMIN");
-        userRepository.save(user);
+        User user = new User(null, "admin", Utils.hashPassword("admin"),"administrador", "ROLE_ADMIN");
+        //userRepository.save(user);
         //routeRepository.deleteAll();
     }
 }

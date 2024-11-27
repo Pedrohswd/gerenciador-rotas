@@ -1,3 +1,4 @@
+import { SignInComponent } from './page/sign-in/sign-in.component';
 import { Routes } from '@angular/router';
 import {LoginComponent} from "./page/login/login.component";
 import { AuthGuard } from './guards/auth.guard';
@@ -24,5 +25,6 @@ export const routes: Routes = [
         { path: '', redirectTo: 'pedidos', pathMatch: 'full' }
     ]
   },
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'cadastre-se', component: SignInComponent}
 ];

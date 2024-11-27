@@ -26,6 +26,8 @@ public class User {
 
     private String password;
 
+    private String name;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "ENG_ROLE", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role_id")
@@ -35,10 +37,11 @@ public class User {
         roles.add(role);
     }
 
-    public User(Long id, String username, String password, String role) {
+    public User(Long id, String username, String password,String name, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name;
         this.roles.add(role);
     }
 }

@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    // Verifica se a rota requer roles específicas
     const requiredRoles = route.data['roles'] as Array<string>;
     if (requiredRoles) {
       const hasRequiredRole = requiredRoles.some(role => 
