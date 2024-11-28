@@ -99,6 +99,32 @@ export class AuthService {
     }
   }
 
+  getUsername(): any {
+    const token = this.authToken;
+    if (!token) return "GUEST";
+    
+    try {
+      const decoded: any = jwtDecode(token); // Decodifica o JWT
+      const username = decoded.sub;
+      return username;
+    } catch (e) {
+      console.error('Erro ao decodificar o token', e);
+    }
+  }
+
+  getUserRole(): any {
+
+    const token = this.authToken;
+    if (!token) return "GUEST";
+    try {
+      const decoded: any = jwtDecode(token); // Decodifica o JWT
+      const roles = decoded.roles || [];
+      return roles;
+    } catch (e) {
+      console.error('Erro ao decodificar o token', e);
+    }
+  }
+
   // Verifica se o token está expirado
   isTokenExpired(): boolean {
     const token = this.authToken;

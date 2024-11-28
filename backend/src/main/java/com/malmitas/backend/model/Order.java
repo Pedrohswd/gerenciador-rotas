@@ -31,14 +31,17 @@ public class Order {
     private double latitude;
     private double longitude;
 
+    @ManyToOne
+    private User createdBy;
+
     @Enumerated(EnumType.STRING)
-    private Status status; // Status do pedido (nota gerada ou não)
+    private Status status;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now(); // Define a data/hora de inclusão automaticamente
+        this.createdAt = LocalDateTime.now();
     }
 }

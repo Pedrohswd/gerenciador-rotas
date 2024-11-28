@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Pedido {
     id?: string;
     name?: string;
@@ -12,4 +14,5 @@ export interface Pedido {
     createdAt?: string;
     latitude?: string;
     longitude?: string;
+    createdBy: User;
 }

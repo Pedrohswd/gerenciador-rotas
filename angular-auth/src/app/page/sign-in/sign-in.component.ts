@@ -43,6 +43,7 @@ export class SignInComponent {
       name: ['', [Validators.required]],
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
       role: ['ROLE_USER']
     }, {
     });

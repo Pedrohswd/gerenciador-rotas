@@ -4,16 +4,24 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Rotas } from '../model/rotas';
+import { AuthService } from './auth-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PedidoService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private authSerive: AuthService
+  ) {}
 
   getAllPedidos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(`${API_CONFIG.baseUrl}/orders`);
+  }
+
+  getAllByUser(): Observable<Pedido[]> {
+    const username = this.authSerive.getUsername()
+    return this.http.get<Pedido[]>(`${API_CONFIG.baseUrl}/orders/${username}`);
   }
 
   createPedido(pedido: Pedido): Observable<Pedido> {

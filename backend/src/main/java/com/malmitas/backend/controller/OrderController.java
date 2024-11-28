@@ -26,6 +26,11 @@ public class  OrderController {
         return ResponseEntity.ok(orderService.getAll());
     }
 
+    @GetMapping(value = "/{username}")
+    public ResponseEntity<List<Order>> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(orderService.findAllByUser(username));
+    }
+
     @DeleteMapping()
     public void delete(@RequestBody Order order) {
         orderService.deletById(order);

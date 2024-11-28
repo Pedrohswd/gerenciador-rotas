@@ -18,6 +18,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { CalendarModule } from 'primeng/calendar';
+import { AuthService } from '../../service/auth-service.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -56,7 +57,14 @@ export class PedidosComponent {
 
   pedidos: Pedido[] = [];
 
-  pedido: Pedido = {};
+  pedido: Pedido = {
+    createdBy: {
+        id: '',
+        name: '',
+        username: '',
+        phone: '',
+    }
+  };
 
   selectedPedidos: Pedido[] = [];
 
@@ -68,7 +76,9 @@ export class PedidosComponent {
 
   rowsPerPageOptions = [5, 10, 20];
 
-  constructor(private pedidoService: PedidoService) { }
+  constructor(private pedidoService: PedidoService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.pedidoService.getAllPedidos().subscribe(data =>{
@@ -101,7 +111,14 @@ export class PedidosComponent {
     }
 
   openNew() {
-      this.pedido = {};
+      this.pedido = {
+        createdBy: {
+            id: '',
+            name: '',
+            username: this.authService.getUsername(),
+            phone: '',
+        }
+      };
       this.submitted = false;
       this.pedidoDialog = true;
   }
@@ -135,7 +152,14 @@ export class PedidosComponent {
   confirmDelete() {
       this.deletepedidoDialog = false;
       this.pedidos = this.pedidos.filter(val => val.id !== this.pedido.id);
-      this.pedido = {};
+      this.pedido = {
+        createdBy: {
+            id: '',
+            name: '',
+            username: '',
+            phone: '',
+        }
+      };
   }
 
   hideDialog() {
@@ -156,7 +180,14 @@ export class PedidosComponent {
                         this.pedidos[this.findIndexById(this.pedido.id)] = pedidoAtualizado;
                     this.pedidos = [...this.pedidos];
                     this.pedidoDialog = false;
-                    this.pedido = {};
+                    this.pedido = {
+                        createdBy: {
+                            id: '',
+                            name: '',
+                            username: '',
+                            phone: '',
+                        }
+                      };
                 },
                 error: (erro) => {
                     console.error('Erro ao atualizar pedido:', erro);
@@ -170,7 +201,14 @@ export class PedidosComponent {
                     this.pedidos.push(novoPedido);
                     this.pedidos = [...this.pedidos];
                     this.pedidoDialog = false;
-                    this.pedido = {};
+                    this.pedido = {
+                        createdBy: {
+                            id: '',
+                            name: '',
+                            username: '',
+                            phone: '',
+                        }
+                      };
                 },
                 error: (erro) => {
                     console.error('Erro ao criar pedido:', erro);

@@ -49,7 +49,7 @@ export class LoginComponent {
         const token = response.token;  // Esperando a resposta com o token JWT
         if (token) {
           console.log('Autenticado com sucesso!');
-          this.router.navigate(['/pedidos']);
+          this.router.navigate(['/home']);
         }
       },
       (error) => {

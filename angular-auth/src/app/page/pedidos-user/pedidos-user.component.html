@@ -6,9 +6,6 @@
                     <div class="my-2">
                         <button pButton pRipple label="Adicionar" icon="pi pi-plus" class="p-button-warning mr-2"
                             (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                            (click)="deleteSelectedPedidos()"
-                            [disabled]="!selectedPedidos || !selectedPedidos.length"></button>
                     </div>
                 </ng-template>
 
@@ -17,10 +14,6 @@
                         <label for="calendar">Pedidos criados em:</label>
                         <p-calendar class="mr-2" [(ngModel)]="selectedDate" [iconDisplay]="'input'" [showIcon]="true"
                             id="calendar" dateFormat="dd/mm/yy" inputId="icondisplay" (onSelect)="filterByDate()" />
-
-                        <button pButton class="button" label="Gerar Rotas" [disabled]="!selectedPedidos || !selectedPedidos.length"
-                            (click)="gerarRotas(selectedPedidos)"></button>
-
                     </div>
                 </ng-template>
             </p-toolbar>
@@ -42,24 +35,17 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="name">Nome do Cliente <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="quantity">Quantidade <p-sortIcon field="quantity"></p-sortIcon></th>
                         <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
                         <th pSortableColumn="street">Rua <p-sortIcon field="street"></p-sortIcon></th>
                         <th pSortableColumn="status">Rota <p-sortIcon field="status"></p-sortIcon></th>
-                        <th>Ações</th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-pedido>
                     <tr>
-                        <td>
-                            <p-tableCheckbox class="p-checkbox" [value]="pedido"></p-tableCheckbox>
-                        </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
                             {{pedido.code || pedido.id}}
                         </td>
@@ -72,7 +58,7 @@
                             {{pedido.quantity}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Price</span>
+                            <span class="p-column-title">Preço</span>
                             {{pedido.price | currency:'BRL'}}
                         </td>
                         <td style="width:14%; min-width:8rem;"><span class="p-column-title">Rua</span>
@@ -80,15 +66,6 @@
                             {{pedido.street}}
                         </td>
                         <td><span [class]="'order-badge order-' + pedido.status.toLowerCase()">{{pedido.status}}</span>
-                        </td>
-                        <td>
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-success mr-2"
-                                    (click)="editPedido(pedido)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                    (click)="deletePedido(pedido)"></button>
-                            </div>
                         </td>
                     </tr>
                 </ng-template>
@@ -141,13 +118,6 @@
                         <label for="quantity">Quantidade</label>
                         <p-inputNumber id="quantity" [(ngModel)]="pedido.quantity"></p-inputNumber>
                     </div>
-
-                    <div class="field">
-                        <label for="phone">Telefone</label>
-                        <input type="text" pInputText id="phone" [(ngModel)]="pedido.createdBy.phone" required autofocus
-                            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pedido.createdBy.phone}" />
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !pedido.createdBy.phone">Phone is required.</small>
-                    </div>
                 </div>
             </ng-template>
 
@@ -167,8 +137,6 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
                     (click)="deletepedidoDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                    (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
@@ -180,8 +148,6 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
                     (click)="deletepedidosDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                    (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
     </div>
