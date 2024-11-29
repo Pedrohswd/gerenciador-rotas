@@ -132,7 +132,6 @@ export class PedidosComponent {
         console.log(data)
     })
   }
-
   editPedido(pedido: Pedido) {
       this.pedido = { ...pedido };
       this.pedidoDialog = true;

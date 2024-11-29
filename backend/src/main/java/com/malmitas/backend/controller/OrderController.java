@@ -25,7 +25,7 @@ public class  OrderController {
     public ResponseEntity<List<Order>> save() {
         return ResponseEntity.ok(orderService.getAll());
     }
-
+  
     @GetMapping(value = "/{username}")
     public ResponseEntity<List<Order>> findByUsername(@PathVariable String username) {
         return ResponseEntity.ok(orderService.findAllByUser(username));
