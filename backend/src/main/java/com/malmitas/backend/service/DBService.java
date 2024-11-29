@@ -28,6 +28,6 @@ public class DBService {
     @Transactional
     public void instanciaDB() {
         User user = new User(null, "admin", Utils.hashPassword("admin"),"administrador", "", "ROLE_ADMIN");
-         //userRepository.save(user);
+        userRepository.save(user);
     }
 }
