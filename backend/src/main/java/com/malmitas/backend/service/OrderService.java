@@ -44,6 +44,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public Order alterarStatus(Order order) {
+        return orderRepository.save(order);
+    }
+
     public List<Order> getAll() {
         return orderRepository.findAll();
     }
@@ -60,5 +64,4 @@ public class OrderService {
         User user = userService.findByUsername(username);
         return orderRepository.findByCreatedBy(user);
     }
-
 }

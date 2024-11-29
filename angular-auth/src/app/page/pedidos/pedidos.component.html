@@ -43,7 +43,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            Selecione
                         </th>
                         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="name">Nome do Cliente <p-sortIcon field="name"></p-sortIcon></th>
@@ -58,7 +58,8 @@
                 <ng-template pTemplate="body" let-pedido>
                     <tr>
                         <td>
-                            <p-tableCheckbox class="p-checkbox" [value]="pedido"></p-tableCheckbox>
+                            <p-tableCheckbox class="p-checkbox" [value]="pedido" *ngIf="pedido.status === 'PENDING' "></p-tableCheckbox>
+
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
                             {{pedido.code || pedido.id}}
@@ -94,7 +95,7 @@
                 </ng-template>
             </p-table>
         </div>
-      
+
         <p-dialog [(visible)]="pedidoDialog" [style]="{width: '500px'}" header="Manutenção de Pedidos" [modal]="true"
             class="p-fluid">
             <ng-template pTemplate="content">
@@ -139,13 +140,13 @@
                     </div>
                     <div class="field col">
                         <label for="quantity">Quantidade</label>
-                        <p-inputNumber id="quantity" [(ngModel)]="pedido.quantity"></p-inputNumber>
+                        <p-inputNumber id="quantity" min="1" max="12" [(ngModel)]="pedido.quantity"></p-inputNumber>
                     </div>
 
                     <div class="field">
                         <label for="phone">Telefone</label>
                         <input type="text" pInputText id="phone" [(ngModel)]="pedido.createdBy.phone" required autofocus
-                            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pedido.createdBy.phone}" />
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pedido.createdBy.phone}" [disabled]="true"/>
                         <small class="ng-dirty ng-invalid" *ngIf="submitted && !pedido.createdBy.phone">Phone is required.</small>
                     </div>
                 </div>
