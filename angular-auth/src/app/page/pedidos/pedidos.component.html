@@ -59,6 +59,7 @@
                     <tr>
                         <td>
                             <p-tableCheckbox class="p-checkbox" [value]="pedido" *ngIf="pedido.status === 'PENDING' "></p-tableCheckbox>
+
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
                             {{pedido.code || pedido.id}}

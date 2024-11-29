@@ -35,4 +35,5 @@ export class PedidoService {
   gerarRotas(pedidos: Pedido[]): Observable<Rotas[]> {
     return this.http.post<Rotas[]>(`${API_CONFIG.baseUrl}/routes/otimizar`, pedidos);
   }
+
 }

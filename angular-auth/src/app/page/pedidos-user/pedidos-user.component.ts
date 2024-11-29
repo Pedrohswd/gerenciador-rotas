@@ -151,6 +151,7 @@ export class PedidosUserComponent {
                         console.error('Erro ao atualizar pedido:', erro.message
                         );
                         alert("Erro ao salvar pedido, verifique o endereço ou sua conexão")
+
                         // Aqui você pode adicionar uma mensagem de erro para o usuário
                     }
                 });
@@ -173,6 +174,7 @@ export class PedidosUserComponent {
                     error: (erro) => {
                         console.error('Erro ao criar pedido:', erro.message);
                         alert("Erro ao salvar pedido, verifique o endereço ou sua conexão")
+
                         // Aqui você pode adicionar uma mensagem de erro para o usuário
                     }
                 });

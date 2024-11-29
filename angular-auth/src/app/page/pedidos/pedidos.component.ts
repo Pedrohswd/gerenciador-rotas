@@ -90,7 +90,6 @@ export class PedidosComponent {
 
     filterByDate() {
         let selectedDate = this.selectedDate;
-
         if (selectedDate) {
             // Converte as datas para o início do dia para comparação
             const startOfDay = new Date(selectedDate);
@@ -109,7 +108,7 @@ export class PedidosComponent {
             this.filteredPedidos = [...this.pedidos];
         }
     }
-
+  
     onRowSelect(event: any) {
         if (event.data.status !== 'PENDING') {
             const index = this.selectedPedidos.indexOf(event.data);

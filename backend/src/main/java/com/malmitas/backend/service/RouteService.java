@@ -29,6 +29,7 @@ public class RouteService {
     private RouteRepository routeRepository;
 
     private static final String API_KEY = "AIzaSyAD1GxRYSjkAJk_brXwpIkJBRouKgzUtAA";
+
     @Autowired
     private OrderService orderService;
 
@@ -37,6 +38,7 @@ public class RouteService {
         if (pedidos.isEmpty()) {
             throw new RuntimeException("Selecione os pedidos");
         }
+
         List<Route> rotas = agruparPedidos(pedidos, 12);
         for (Route rota : rotas) {
             Order pontoInicial = new Order();
@@ -105,6 +107,7 @@ public class RouteService {
             orderService.alterarStatus(order);
         }
     }
+
 
     public DistanceDuration calcularDistanciaViaAPI(double latAtual, double lonAtual, double latDest, double lonDest) {
 
