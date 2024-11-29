@@ -44,6 +44,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public Order alterarStatus(Order order) {
+        return orderRepository.save(order);
+    }
+
     public List<Order> getAll() {
         return orderRepository.findAll();
     }

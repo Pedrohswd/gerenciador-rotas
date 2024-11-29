@@ -116,7 +116,13 @@
                     </div>
                     <div class="field col">
                         <label for="quantity">Quantidade</label>
-                        <p-inputNumber id="quantity" [(ngModel)]="pedido.quantity"></p-inputNumber>
+                        <p-inputNumber id="quantity" 
+                        [(ngModel)]="pedido.quantity"
+                        [max]="12"
+                        [min]="1"
+                        [showButtons]="true"
+                        [size]="1">
+                    </p-inputNumber>
                     </div>
                 </div>
             </ng-template>

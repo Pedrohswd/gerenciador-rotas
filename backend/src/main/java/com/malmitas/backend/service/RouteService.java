@@ -6,6 +6,7 @@ import com.malmitas.backend.model.Order;
 import com.malmitas.backend.model.Route;
 import com.malmitas.backend.model.dtos.response.GeoLocationResponse;
 import com.malmitas.backend.model.dtos.response.RouteResponse;
+import com.malmitas.backend.model.enuns.Status;
 import com.malmitas.backend.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,14 @@ public class RouteService {
     private RouteRepository routeRepository;
 
     private static final String API_KEY = "AIzaSyAD1GxRYSjkAJk_brXwpIkJBRouKgzUtAA";
+    @Autowired
+    private OrderService orderService;
 
 
     public List<Route> gerarRotasOtimizadas(List<Order> pedidos) {
+        if (pedidos.isEmpty()) {
+            throw new RuntimeException("Selecione os pedidos");
+        }
         List<Route> rotas = agruparPedidos(pedidos, 12);
         for (Route rota : rotas) {
             Order pontoInicial = new Order();
@@ -80,9 +86,24 @@ public class RouteService {
         response.setOrders(rotaOtimizada);
 
         Route route = new Route(response);
+        alterarStatusCompleted(route);
         routeRepository.save(route);
-        
+
         return response;
+    }
+
+    public void alterarStatusCompleted(Route route){
+        for (Order order : route.getOrders()) {
+            order.setStatus(Status.COMPLETED);
+            orderService.alterarStatus(order);
+        }
+    }
+
+    public void alterarStatusPending(Route route){
+        for (Order order : route.getOrders()) {
+            order.setStatus(Status.PENDING);
+            orderService.alterarStatus(order);
+        }
     }
 
     public DistanceDuration calcularDistanciaViaAPI(double latAtual, double lonAtual, double latDest, double lonDest) {
@@ -181,6 +202,8 @@ public class RouteService {
     }
 
     public void deletarRota(Long id) {
+        Route rota = routeRepository.findById(id).get();
+        alterarStatusPending(rota);
         routeRepository.deleteById(id);
     }
 
