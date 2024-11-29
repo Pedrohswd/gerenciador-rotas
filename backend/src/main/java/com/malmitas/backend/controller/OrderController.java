@@ -17,13 +17,23 @@ public class  OrderController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Order> save(@RequestBody Order order) {
+    public ResponseEntity<Order> save(@RequestBody Order order) throws Exception {
         return ResponseEntity.ok(orderService.save(order));
     }
 
     @GetMapping()
     public ResponseEntity<List<Order>> save() {
         return ResponseEntity.ok(orderService.getAll());
+    }
+  
+    @GetMapping(value = "/{username}")
+    public ResponseEntity<List<Order>> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(orderService.findAllByUser(username));
+    }
+
+    @DeleteMapping()
+    public void delete(@RequestBody Order order) {
+        orderService.deletById(order);
     }
 
 }

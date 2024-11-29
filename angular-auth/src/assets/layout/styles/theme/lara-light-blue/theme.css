@@ -12,7 +12,7 @@
   --surface-f: #ffffff;
   --text-color: #4b5563;
   --text-color-secondary: #6b7280;
-  --primary-color: #3B82F6;
+  --primary-color: #AA5339;
   --primary-color-text: #ffffff;
   --surface-0: #ffffff;
   --surface-50: #f9fafb;
@@ -1691,7 +1691,7 @@
   }
 
   .p-selectbutton .p-button {
-    background: #ffffff;
+    background: #AA5339;
     border: 1px solid #d1d5db;
     color: #4b5563;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -2105,7 +2105,7 @@
 .p-buttonset.p-button-secondary > .p-button,
 .p-splitbutton.p-button-secondary > .p-button {
     color: #ffffff;
-    background: #64748b;
+    background: #AA5339;
     border: 1px solid #64748b;
   }
   .p-button.p-button-secondary:not(:disabled):hover,

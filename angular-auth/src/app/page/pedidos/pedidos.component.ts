@@ -16,6 +16,9 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
+import { TagModule } from 'primeng/tag';
+import { CalendarModule } from 'primeng/calendar';
+import { AuthService } from '../../service/auth-service.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -24,6 +27,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     TableModule,
     FileUploadModule,
+    TagModule,
     FormsModule,
     ButtonModule,
     RippleModule,
@@ -35,6 +39,7 @@ import { CommonModule } from '@angular/common';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
+    CalendarModule,
     DialogModule],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.css'
@@ -46,11 +51,22 @@ export class PedidosComponent {
 
   deletepedidosDialog: boolean = false;
 
+  selectedDate: Date = new Date()
+  
+  filteredPedidos: Pedido[] = [];
+
   pedidos: Pedido[] = [];
 
-  pedido: Pedido = {};
+  pedido: Pedido = {
+    createdBy: {
+        id: '',
+        name: '',
+        username: '',
+        phone: '',
+    }
+  };
 
-  selectedpedidos: Pedido[] = [];
+  selectedPedidos: Pedido[] = [];
 
   submitted: boolean = false;
 
@@ -60,22 +76,49 @@ export class PedidosComponent {
 
   rowsPerPageOptions = [5, 10, 20];
 
-  constructor(private pedidoService: PedidoService) { }
+  constructor(private pedidoService: PedidoService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
-      this.pedidoService.getAllPedidos().subscribe(data => this.pedidos = data);
-
-      this.cols = [
-          { field: 'pedido', header: 'pedido' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
+    this.pedidoService.getAllPedidos().subscribe(data =>{
+        this.filteredPedidos = data
+        this.pedidos = data
+    });
+      this.filterByDate()
   }
 
+  filterByDate() {
+        let selectedDate = this.selectedDate;
+        
+        if (selectedDate) {
+            // Converte as datas para o início do dia para comparação
+            const startOfDay = new Date(selectedDate);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            this.filteredPedidos = this.pedidos.filter(pedido => {
+                if (pedido.createdAt) {
+                    const pedidoDate = new Date(pedido.createdAt);
+                    pedidoDate.setHours(0, 0, 0, 0);
+                    return pedidoDate.getTime() === startOfDay.getTime();
+                }
+                return false;
+            });
+        } else {
+            // Se nenhuma data selecionada, mostra todos os pedidos
+            this.filteredPedidos = [...this.pedidos];
+        }
+    }
+
   openNew() {
-      this.pedido = {};
+      this.pedido = {
+        createdBy: {
+            id: '',
+            name: '',
+            username: this.authService.getUsername(),
+            phone: '',
+        }
+      };
       this.submitted = false;
       this.pedidoDialog = true;
   }
@@ -84,6 +127,11 @@ export class PedidosComponent {
       this.deletepedidosDialog = true;
   }
 
+  gerarRotas(pedidos: Pedido[]){
+    this.pedidoService.gerarRotas(pedidos).subscribe(data => {
+        console.log(data)
+    })
+  }
   editPedido(pedido: Pedido) {
       this.pedido = { ...pedido };
       this.pedidoDialog = true;
@@ -96,14 +144,21 @@ export class PedidosComponent {
 
   confirmDeleteSelected() {
       this.deletepedidosDialog = false;
-      this.pedidos = this.pedidos.filter(val => !this.selectedpedidos.includes(val));
-      this.selectedpedidos = [];
+      this.pedidos = this.pedidos.filter(val => !this.selectedPedidos.includes(val));
+      this.selectedPedidos = [];
   }
 
   confirmDelete() {
       this.deletepedidoDialog = false;
       this.pedidos = this.pedidos.filter(val => val.id !== this.pedido.id);
-      this.pedido = {};
+      this.pedido = {
+        createdBy: {
+            id: '',
+            name: '',
+            username: '',
+            phone: '',
+        }
+      };
   }
 
   hideDialog() {
@@ -114,7 +169,7 @@ export class PedidosComponent {
   savePedido() {
       this.submitted = true;
 
-if (this.pedido.name?.trim()) {
+    if (this.pedido.name?.trim()) {
         if (this.pedido.id) {
             // Atualizar pedido existente
             this.pedidoService.updatePedido(this.pedido).subscribe({
@@ -124,7 +179,14 @@ if (this.pedido.name?.trim()) {
                         this.pedidos[this.findIndexById(this.pedido.id)] = pedidoAtualizado;
                     this.pedidos = [...this.pedidos];
                     this.pedidoDialog = false;
-                    this.pedido = {};
+                    this.pedido = {
+                        createdBy: {
+                            id: '',
+                            name: '',
+                            username: '',
+                            phone: '',
+                        }
+                      };
                 },
                 error: (erro) => {
                     console.error('Erro ao atualizar pedido:', erro);
@@ -138,7 +200,14 @@ if (this.pedido.name?.trim()) {
                     this.pedidos.push(novoPedido);
                     this.pedidos = [...this.pedidos];
                     this.pedidoDialog = false;
-                    this.pedido = {};
+                    this.pedido = {
+                        createdBy: {
+                            id: '',
+                            name: '',
+                            username: '',
+                            phone: '',
+                        }
+                      };
                 },
                 error: (erro) => {
                     console.error('Erro ao criar pedido:', erro);

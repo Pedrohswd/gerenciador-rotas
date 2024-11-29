@@ -14,7 +14,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   const token = localStorage.getItem('token')?.replace(/"/g, '');
-  console.log(token)
   
   
   if (token) {

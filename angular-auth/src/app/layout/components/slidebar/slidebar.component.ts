@@ -8,8 +8,7 @@ import { LayoutService } from '../../service/layout.service';
   imports: [
     MenuComponent
   ],
-  templateUrl: './slidebar.component.html',
-  styleUrl: './slidebar.component.css'
+  templateUrl: './slidebar.component.html'
 })
 export class SlidebarComponent {
   

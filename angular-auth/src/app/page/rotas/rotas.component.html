@@ -1,0 +1,98 @@
+<div class="col-12">
+    <div class="card">
+        <h5>Rotas Geradas</h5>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+                <div class="my-2">
+                    <label for="calendar" class="mr-2">Rotas geradas em:</label>
+                    <p-calendar class="mr-2"
+                    [(ngModel)]="selectedDate" 
+                    [iconDisplay]="'input'" 
+                    [showIcon]="true"
+                    id="calendar"
+                    dateFormat="dd/mm/yy"
+                    LocalDate 
+                    inputId="icondisplay"
+                    (onSelect)="filterByDate()"/>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="right">
+                <div class="my-2 font-semibold">
+                    <label>Entregadores necessários para entrega: {{entregadores}}</label>
+                </div>
+            </ng-template>
+        </p-toolbar>
+        <p-table [value]="filteredRotas" dataKey="name" [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                
+                <div class="flex table-header">
+                    
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="distanciaTotal">Distancia <p-sortIcon field="distanciaTotal"></p-sortIcon></th>
+                    <th pSortableColumn="closed">Status <p-sortIcon field="closed"></p-sortIcon></th>
+                    <th pSortableColumn="rating">Ações <p-sortIcon field="rating"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rota let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="rota" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td style="min-width: 12rem;">{{rota.id}}</td>
+                    <td style="min-width: 8rem;">{{rota.distanciaTotal}} KM</td>
+                    <td>
+                        <p-tag 
+                            [severity]="rota.closed ? 'success' : 'danger'"
+                            [value]="rota.closed ? 'Realizada' : 'Pendente'">
+                        </p-tag>
+                    </td>
+                    <td>
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success mr-2" (click)="concluirRota(rota)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deletePedido(rota)"></button>
+                            <button pButton pRipple icon="pi pi-share-alt" class="p-button-rounded p-button-info" (click)="gerarLinkRota(rota)"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-rota>
+                <tr>
+                    <td colspan="7">
+                        <div class="p-3">
+                            <p-table [value]="rota.orders" responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="quantity">Quantidade <p-sortIcon field="quantity"></p-sortIcon></th>
+                    <th pSortableColumn="price">Preço <p-sortIcon field="price"></p-sortIcon></th>
+                    <th style="width: 4rem"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pedido>
+                <tr>
+                    <td>{{pedido.id}}</td>
+                    <td>{{pedido.name}}</td>
+                    <td>{{pedido.quantity}}</td>
+                    <td>{{pedido.price | currency:'BRL'}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6">There are no order for this product yet.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>
+</div>

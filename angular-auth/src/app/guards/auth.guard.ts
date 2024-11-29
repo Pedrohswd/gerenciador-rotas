@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    // Verifica se a rota requer roles específicas
     const requiredRoles = route.data['roles'] as Array<string>;
     if (requiredRoles) {
       const hasRequiredRole = requiredRoles.some(role => 
@@ -28,6 +27,13 @@ export class AuthGuard implements CanActivate {
         alert(`Você não tem permissão`);
         return false;
       }
+    }
+
+    
+    if(this.authService.isTokenExpired()){
+      alert(`Token expirou!`);
+      this.router.navigate(['/login'])
+      return false;
     }
 
     return true;
