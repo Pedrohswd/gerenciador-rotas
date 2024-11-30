@@ -1,0 +1,74 @@
+# 🍴 **Marmitas Delivery Frontend**  
+Frontend do sistema de otimização de rotas para entrega de marmitas. Desenvolvido com **Angular**, este sistema ajuda a gerenciar rotas de entrega, pedidos e fornece integração com o **Google Maps** para compartilhamento e visualização das rotas.  
+
+---
+
+## 📂 **Estrutura do Projeto**
+
+O projeto segue uma estrutura modular, com componentes separados para facilitar a manutenção e escalabilidade. Abaixo, você encontra detalhes de cada componente e sua funcionalidade.
+
+---
+
+## 🧩 **Componentes**
+
+### **1. RotasComponent**
+📍 **Arquivo:** `src/app/components/rotas/rotas.component.ts`  
+💡 **Descrição:** Gerencia e exibe as rotas de entrega.  
+
+#### **📋 Funcionalidades:**  
+- Lista todas as rotas cadastradas.  
+- Gera links de rotas no Google Maps para compartilhamento.  
+- Abre o link gerado em uma nova aba do navegador.  
+
+#### **⚙️ Métodos principais:**  
+- **`gerarLinkRota(rota: Rotas)`**  
+  Faz a requisição ao backend para obter o link da rota e o abre em uma nova aba.
+
+---
+
+### **2. PedidosComponent**
+📍 **Arquivo:** `src/app/components/pedidos/pedidos.component.ts`  
+💡 **Descrição:** Permite gerenciar os pedidos do sistema.  
+
+#### **📋 Funcionalidades:**  
+- Lista os pedidos registrados.  
+- Adiciona, edita e remove pedidos.  
+- Exibe informações detalhadas de cada pedido.  
+
+#### **⚙️ Métodos principais:**  
+- **`adicionarPedido()`**: Adiciona um novo pedido à lista.  
+- **`editarPedido(pedido: Pedido)`**: Edita um pedido existente.  
+- **`removerPedido(pedidoId: number)`**: Remove um pedido selecionado.
+
+---
+
+
+### **3. HeaderComponent**
+📍 **Arquivo:** `src/app/components/header/header.component.ts`  
+💡 **Descrição:** Responsável pelo cabeçalho da aplicação.  
+
+#### **📋 Funcionalidades:**  
+- Exibe o nome do sistema e o menu de navegação.  
+- Permite alternar entre as seções do sistema.
+
+---
+
+### **4. FooterComponent**
+📍 **Arquivo:** `src/app/components/footer/footer.component.ts`  
+💡 **Descrição:** Exibe o rodapé da aplicação.  
+
+#### **📋 Funcionalidades:**  
+- Mostra informações de copyright e links úteis.  
+
+---
+
+## 🛠️ **Tecnologias Utilizadas**
+
+- **Framework:** Angular 17  
+- **Linguagem:** TypeScript  
+- **Bibliotecas:**  
+  - Angular Material  
+  - PrimeNG  
+  - RxJS  
+- **API de Mapa:** Google Maps JavaScript API  
+
